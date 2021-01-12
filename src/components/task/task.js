@@ -1,45 +1,61 @@
-import React, { Component } from 'react';
+import React from 'react';
+// import TaskList from '../task-list';
 
-export default class Task extends Component {
+// export default class Task extends Component {
 
+//   render() {
 
-  onLabelClick = () => {
-    this.setState(({ done }) => {
-      return {
-        done: !done
-      }
-    });
-  };
+//     let { className, label, onDeleted, onToggleDone, done } = this.props;
 
-  state = {
-    done: false
-  };
+//     if (done) {
+//       className = 'completed';
+//     } else {
+//       className = '';
+//     }
 
+//     return (
+//       <li className={className}>
+//         <div className="view" onClick={onToggleDone}>
+//           <input className="toggle" type="checkbox" />
+//           <label>
+//             <span className="description">{label}</span>
+//             <span className="created">created 17 seconds ago</span>
+//           </label>
+//           <button className="icon icon-edit"></button>
+//           <button className="icon icon-destroy" onClick={onDeleted}></button>
+//         </div>
+//         <input type="text" className="edit" value="Editing task" />
+//       </li>
+//     );
+//   }
+// }
 
-  render() {
+const Task = (props) => {
 
-    let { className, label, onDeleted } = this.props;
-    const { done } = this.state;
+  let { label, onDeleted, onToggleDone, done } = props;
 
-    if (done) {
-      className = 'completed';
-    } else {
-      className = '';
-    }
+  let className;
 
-    return (
-      <li className={className}>
-        <div className="view" onClick={this.onLabelClick}>
-          <input className="toggle" type="checkbox" />
-          <label>
-            <span className="description">{label}</span>
-            <span className="created">created 17 seconds ago</span>
-          </label>
-          <button className="icon icon-edit"></button>
-          <button className="icon icon-destroy" onClick={onDeleted}></button>
-        </div>
-        <input type="text" className="edit" value="Editing task" />
-      </li>
-    );
+  if (done) {
+    className = 'completed';
+  } else {
+    className = '';
   }
+
+  return (
+    <li className={className}>
+      <div className="view" onClick={onToggleDone}>
+        <input className="toggle" type="checkbox" />
+        <label>
+          <span className="description">{label}</span>
+          <span className="created">created 17 seconds ago</span>
+        </label>
+        <button className="icon icon-edit"></button>
+        <button className="icon icon-destroy" onClick={onDeleted}></button>
+      </div>
+      <input type="text" className="edit" value="Editing task" />
+    </li>
+  );
 }
+
+export default Task;
