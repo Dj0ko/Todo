@@ -1,16 +1,16 @@
 import React from 'react';
-import Task from './task';
+import Task from '../task';
 
-const TaskList = ({ todos }) => {
+const TaskList = ({ todos, onDeleted }) => {
 
   const tasks = todos.map(item => {
     return (
-      <Task {...item}/>
+      <Task {...item} key={item.id} onDeleted={() => onDeleted(item.id)}/>
     );
   })
   return (
     <ul className="todo-list">
-      { tasks }
+      { tasks}
     </ul>
   );
 }
