@@ -4,6 +4,7 @@ import Task from '../task';
 const TaskList = ({ todos, onDeleted, onToggleDone }) => {
 
   const tasks = todos.map(item => {
+    
     return (
       <Task
         {...item}
@@ -15,7 +16,7 @@ const TaskList = ({ todos, onDeleted, onToggleDone }) => {
   })
   return (
     <ul className="todo-list">
-      { tasks}
+      { tasks }
     </ul>
   );
 }

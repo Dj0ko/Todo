@@ -3,17 +3,9 @@ import React, { Component } from 'react';
 import NewTaskForm from '../new-task-form';
 import TaskList from '../task-list';
 import Footer from '../footer';
-import AddTask from '../add-task';
+// import { id } from 'date-fns/locale';
 
 export default class App extends Component {
-
-  // state = {
-  //   todoTasks: [
-  //     { className: 'completed', label: 'Completed task', id: 1 },
-  //     { className: 'editing', label: 'Editing task', id: 2 },
-  //     { className: '', label: 'Active task', id: 3 }
-  //   ]
-  // };
 
   maxId = 100;
 
@@ -29,7 +21,7 @@ export default class App extends Component {
     return {
       label,
       done: false,
-      id: this.maxId++
+      id: this.maxId++,
     };
   };
 
@@ -82,6 +74,59 @@ export default class App extends Component {
     });
   };
 
+  onToggleAll = () => {
+    this.setState(({ todoTasks }) => {
+      todoTasks.filter(el => {
+        if (el.class) {
+          el.class = '';
+        }
+      })
+      return {
+        todoTasks: todoTasks
+      }
+    })
+  }
+
+  onToggleActive = () => {
+    this.setState(({ todoTasks }) => {
+      todoTasks.filter(el => {
+        if (el.done) {
+          el.class = 'hidden';
+        } else {
+          el.class = '';
+        }
+      })
+      return {
+        todoTasks: todoTasks
+      }
+    })
+  }
+
+  onToggleCompleted = () => {
+    this.setState(({ todoTasks }) => {
+      todoTasks.filter(el => {
+        if (!el.done) {
+          el.class = 'hidden';
+        } else {
+          el.class = '';
+        }
+      })
+      return {
+        todoTasks: todoTasks
+      }
+    })
+  }
+
+  onToggleClearAll = () => {
+    this.setState(({ todoTasks }) => {
+      todoTasks.filter(el => {
+        if (el.done) {
+          this.deleteItem(el.id);
+        }
+      })
+    })
+  }
+
   render() {
     const { todoTasks } = this.state;
     const doneCount = todoTasks.filter(el => !el.done).length;
@@ -90,7 +135,7 @@ export default class App extends Component {
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <NewTaskForm />
+          <NewTaskForm onItemAdded={this.addItem} />
         </header>
         <section className="main">
           <TaskList
@@ -98,8 +143,13 @@ export default class App extends Component {
             onDeleted={this.deleteItem}
             onToggleDone={this.onToggleDone}
           />
-          <AddTask onItemAdded={this.addItem} />
-          <Footer done={doneCount}/>
+          <Footer
+            done={doneCount}
+            onToggleAll={this.onToggleAll}
+            onToggleActive={this.onToggleActive}
+            onToggleCompleted={this.onToggleCompleted}
+            onToggleClearAll={this.onToggleClearAll}
+          />
         </section>
       </section>
     );
