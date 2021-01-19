@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import NewTaskForm from '../new-task-form';
 import TaskList from '../task-list';
 import Footer from '../footer';
-// import { id } from 'date-fns/locale';
 
 export default class App extends Component {
 
@@ -42,11 +41,12 @@ export default class App extends Component {
 
   addItem = (text) => {
     const newItem = this.createTodoTask(text);
+    newItem.time = new Date();
 
     this.setState(({ todoTasks }) => {
       const newArr = [
         ...todoTasks,
-        newItem
+        newItem,
       ];
 
       return {
@@ -74,56 +74,64 @@ export default class App extends Component {
     });
   };
 
-  onToggleAll = () => {
+  onButtonAll = () => {
     this.setState(({ todoTasks }) => {
-      todoTasks.filter(el => {
+      let newArr = todoTasks.filter(el => {
         if (el.class) {
           el.class = '';
         }
+        return el;
       })
       return {
-        todoTasks: todoTasks
+        todoTasks: newArr
       }
     })
   }
 
-  onToggleActive = () => {
+  onButtonActive = () => {
     this.setState(({ todoTasks }) => {
-      todoTasks.filter(el => {
+      let newArr = todoTasks.filter(el => {
         if (el.done) {
           el.class = 'hidden';
         } else {
           el.class = '';
         }
+        return el;
       })
       return {
-        todoTasks: todoTasks
+        todoTasks: newArr
       }
     })
   }
 
-  onToggleCompleted = () => {
+  onButtonCompleted = () => {
     this.setState(({ todoTasks }) => {
-      todoTasks.filter(el => {
+      let newArr = todoTasks.filter(el => {
         if (!el.done) {
           el.class = 'hidden';
         } else {
           el.class = '';
         }
+        return el;
       })
       return {
-        todoTasks: todoTasks
+        todoTasks: newArr
       }
     })
   }
 
-  onToggleClearAll = () => {
+  onButtonClearAll = () => {
     this.setState(({ todoTasks }) => {
+      let newArr = [];
       todoTasks.filter(el => {
-        if (el.done) {
-          this.deleteItem(el.id);
+        if (!el.done) {
+          newArr.push(el);
         }
+        return el;
       })
+      return {
+        todoTasks: newArr
+      }
     })
   }
 
@@ -145,10 +153,10 @@ export default class App extends Component {
           />
           <Footer
             done={doneCount}
-            onToggleAll={this.onToggleAll}
-            onToggleActive={this.onToggleActive}
-            onToggleCompleted={this.onToggleCompleted}
-            onToggleClearAll={this.onToggleClearAll}
+            onButtonAll={this.onButtonAll}
+            onButtonActive={this.onButtonActive}
+            onButtonCompleted={this.onButtonCompleted}
+            onButtonClearAll={this.onButtonClearAll}
           />
         </section>
       </section>

@@ -1,19 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const TasksFilter = ({ onToggleAll, onToggleActive, onToggleCompleted }) => {
+const TasksFilter = ({ onButtonAll, onButtonActive, onButtonCompleted }) => {
   return (
     <ul className="filters">
       <li>
-        <button className="selected" onClick={onToggleAll}>All</button>
+        <button className="selected" onClick={onButtonAll}>All</button>
       </li>
       <li>
-        <button onClick={onToggleActive}>Active</button>
+        <button onClick={onButtonActive}>Active</button>
       </li>
       <li>
-        <button onClick={onToggleCompleted}>Completed</button>
+        <button onClick={onButtonCompleted}>Completed</button>
       </li>
     </ul>
   );
+}
+
+TasksFilter.propTypes = {
+  onButtonAll: PropTypes.func,
+  onButtonActive: PropTypes.func,
+  onButtonCompleted: PropTypes.func,
 }
 
 export default TasksFilter;
