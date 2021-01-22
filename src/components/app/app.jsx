@@ -30,14 +30,15 @@ export default class App extends Component {
   addItem = (text) => {
     const newItem = this.createTodoTask(text);
     newItem.time = new Date();
+    if (text.trim() !== '') {
+      this.setState(({ todoTasks }) => {
+        const newArr = [...todoTasks, newItem];
 
-    this.setState(({ todoTasks }) => {
-      const newArr = [...todoTasks, newItem];
-
-      return {
-        todoTasks: newArr,
-      };
-    });
+        return {
+          todoTasks: newArr,
+        };
+      });
+    }
   };
 
   onToggleDone = (id) => {
@@ -47,17 +48,17 @@ export default class App extends Component {
       const oldItem = todoTasks[idx];
       const newItem = { ...oldItem, done: !oldItem.done };
 
-      const newArr = [...todoTasks.slice(0, idx), newItem, ...todoTasks.slice(idx + 1)];
+      const doneTasks = [...todoTasks.slice(0, idx), newItem, ...todoTasks.slice(idx + 1)];
 
       return {
-        todoTasks: newArr,
+        todoTasks: doneTasks,
       };
     });
   };
 
   onButtonAll = () => {
     this.setState(({ todoTasks }) => {
-      const newArr = todoTasks.filter((el) => {
+      const allTasks = todoTasks.filter((el) => {
         const item = el;
         if (el.nameOfClass) {
           item.nameOfClass = '';
@@ -65,14 +66,14 @@ export default class App extends Component {
         return item;
       });
       return {
-        todoTasks: newArr,
+        todoTasks: allTasks,
       };
     });
   };
 
   onButtonActive = () => {
     this.setState(({ todoTasks }) => {
-      const newArr = todoTasks.filter((el) => {
+      const activeTasks = todoTasks.filter((el) => {
         const item = el;
         if (el.done) {
           item.nameOfClass = 'hidden';
@@ -82,14 +83,14 @@ export default class App extends Component {
         return item;
       });
       return {
-        todoTasks: newArr,
+        todoTasks: activeTasks,
       };
     });
   };
 
   onButtonCompleted = () => {
     this.setState(({ todoTasks }) => {
-      const newArr = todoTasks.filter((el) => {
+      const completedTasks = todoTasks.filter((el) => {
         const item = el;
         if (!el.done) {
           item.nameOfClass = 'hidden';
@@ -99,22 +100,22 @@ export default class App extends Component {
         return item;
       });
       return {
-        todoTasks: newArr,
+        todoTasks: completedTasks,
       };
     });
   };
 
   onButtonClearAll = () => {
     this.setState(({ todoTasks }) => {
-      const newArr = [];
+      const activeTasks = [];
       todoTasks.filter((el) => {
         if (!el.done) {
-          newArr.push(el);
+          activeTasks.push(el);
         }
         return el;
       });
       return {
-        todoTasks: newArr,
+        todoTasks: activeTasks,
       };
     });
   };
