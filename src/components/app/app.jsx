@@ -19,10 +19,10 @@ export default class App extends Component {
     this.setState(({ todoTasks }) => {
       const idx = todoTasks.findIndex((el) => el.id === id);
 
-      const updatedArr = [...todoTasks.slice(0, idx), ...todoTasks.slice(idx + 1)];
+      const updatedTodoTasks = [...todoTasks.slice(0, idx), ...todoTasks.slice(idx + 1)];
 
       return {
-        todoTasks: updatedArr,
+        todoTasks: updatedTodoTasks,
       };
     });
   };
@@ -32,10 +32,10 @@ export default class App extends Component {
     newItem.time = new Date();
     if (text.trim() !== '') {
       this.setState(({ todoTasks }) => {
-        const updatedArr = [...todoTasks, newItem];
+        const updatedTodoTasks = [...todoTasks, newItem];
 
         return {
-          todoTasks: updatedArr,
+          todoTasks: updatedTodoTasks,
         };
       });
     }
