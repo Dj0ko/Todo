@@ -27,8 +27,8 @@ export default class App extends Component {
     });
   };
 
-  addItem = (text) => {
-    const newItem = this.createTodoTask(text);
+  addItem = (text, minutes, seconds) => {
+    const newItem = this.createTodoTask(text, minutes, seconds);
     newItem.time = new Date();
     if (text.trim() !== '') {
       this.setState(({ todoTasks }) => {
@@ -120,13 +120,15 @@ export default class App extends Component {
     });
   };
 
-  createTodoTask(label) {
+  createTodoTask(label, minutes = 30, seconds = 0) {
     this.maxId += 1;
     return {
       label,
       done: false,
       id: this.maxId,
       nameOfClass: '',
+      minutes: Number(minutes),
+      seconds: Number(seconds),
     };
   }
 

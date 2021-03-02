@@ -1,9 +1,0 @@
-.new-task-form {
-  display: flex;
-}
-
-.form-button {
-  width: 30%;
-  border: 1px solid rgba(175, 47, 47, 0.2);
-  border-radius: 3px; 
-}
