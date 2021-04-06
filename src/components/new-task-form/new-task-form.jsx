@@ -1,67 +1,61 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-export default class NewTaskForm extends Component {
-  state = {
+const NewTaskForm = ({ onItemAdded }) => {
+  const initialState = {
     label: '',
     minutes: '',
     seconds: '',
   };
 
-  onLabelChange = (evt) => {
+  const [dataState, setDataState] = useState(initialState);
+
+  const { label, minutes, seconds } = dataState;
+
+  const onLabelChange = (evt) => {
     const { name } = evt.target;
 
-    this.setState({
-      [name]: evt.target.value,
-    });
+    setDataState((data) => ({ ...data, [name]: evt.target.value }));
   };
 
-  onSubmit = (evt) => {
+  const onSubmit = (evt) => {
     evt.preventDefault();
-    const { label, minutes, seconds } = this.state;
-    const { onItemAdded } = this.props;
     onItemAdded(label, minutes, seconds);
-    this.setState({
-      label: '',
-      minutes: '',
-      seconds: '',
-    });
+    setDataState(initialState);
   };
 
-  render() {
-    const { label, minutes, seconds } = this.state;
+  return (
+    <form className="new-todo-form" onSubmit={onSubmit}>
+      <input
+        type="text"
+        name="label"
+        className="new-todo"
+        placeholder="What needs to be done?"
+        onChange={onLabelChange}
+        value={label}
+      />
+      <input
+        type="text"
+        name="minutes"
+        className="new-todo-form__timer"
+        placeholder="Min"
+        value={minutes}
+        onChange={onLabelChange}
+      />
+      <input
+        type="text"
+        name="seconds"
+        className="new-todo-form__timer"
+        placeholder="Sec"
+        value={seconds}
+        onChange={onLabelChange}
+      />
+      <input type="submit" className="hidden" />
+    </form>
+  );
+};
 
-    return (
-      <form className="new-todo-form" onSubmit={this.onSubmit}>
-        <input
-          type="text"
-          name="label"
-          className="new-todo"
-          placeholder="What needs to be done?"
-          onChange={this.onLabelChange}
-          value={label}
-        />
-        <input
-          type="text"
-          name="minutes"
-          className="new-todo-form__timer"
-          placeholder="Min"
-          value={minutes}
-          onChange={this.onLabelChange}
-        />
-        <input
-          type="text"
-          name="seconds"
-          className="new-todo-form__timer"
-          placeholder="Sec"
-          value={seconds}
-          onChange={this.onLabelChange}
-        />
-        <input type="submit" className="hidden" />
-      </form>
-    );
-  }
-}
+export default NewTaskForm;
 
 NewTaskForm.propTypes = {
   onItemAdded: PropTypes.func.isRequired,

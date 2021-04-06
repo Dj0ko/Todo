@@ -1,22 +1,41 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
 import NewTaskForm from '../new-task-form/new-task-form';
 import TaskList from '../task-list/task-list';
 import Footer from '../footer/footer';
 
-export default class App extends Component {
-  maxId = 100;
+const App = () => {
+  const createTodoTask = (label, minutes = 30, seconds = 0) => ({
+    label,
+    done: false,
+    id: label + Date.now(),
+    nameOfClass: '',
+    minutes: Number(minutes),
+    seconds: Number(seconds),
+  });
 
-  state = {
-    todoTasks: [
-      this.createTodoTask('Completed task'),
-      this.createTodoTask('Editing task'),
-      this.createTodoTask('Active task'),
-    ],
+  const [dataState, setDataState] = useState({
+    todoTasks: [createTodoTask('Completed task'), createTodoTask('Editing task'), createTodoTask('Active task')],
+  });
+
+  // Функция, добавляющая задачу
+  const addItem = (text, minutes, seconds) => {
+    const newItem = createTodoTask(text, minutes, seconds);
+    newItem.time = new Date();
+    if (text.trim() !== '') {
+      setDataState(({ todoTasks }) => {
+        const updatedTodoTasks = [...todoTasks, newItem];
+
+        return {
+          todoTasks: updatedTodoTasks,
+        };
+      });
+    }
   };
 
-  deleteItem = (id) => {
-    this.setState(({ todoTasks }) => {
+  // Функция, удаляющая задачу
+  const deleteItem = (id) => {
+    setDataState(({ todoTasks }) => {
       const idx = todoTasks.findIndex((el) => el.id === id);
 
       const updatedTodoTasks = [...todoTasks.slice(0, idx), ...todoTasks.slice(idx + 1)];
@@ -27,22 +46,9 @@ export default class App extends Component {
     });
   };
 
-  addItem = (text, minutes, seconds) => {
-    const newItem = this.createTodoTask(text, minutes, seconds);
-    newItem.time = new Date();
-    if (text.trim() !== '') {
-      this.setState(({ todoTasks }) => {
-        const updatedTodoTasks = [...todoTasks, newItem];
-
-        return {
-          todoTasks: updatedTodoTasks,
-        };
-      });
-    }
-  };
-
-  onToggleDone = (id) => {
-    this.setState(({ todoTasks }) => {
+  // Функция, помечающая выполненную задачу
+  const onToggleDone = (id) => {
+    setDataState(({ todoTasks }) => {
       const idx = todoTasks.findIndex((el) => el.id === id);
 
       const oldItem = todoTasks[idx];
@@ -56,8 +62,9 @@ export default class App extends Component {
     });
   };
 
-  onButtonAll = () => {
-    this.setState(({ todoTasks }) => {
+  // Функция, показывающая все задачи
+  const onButtonAll = () => {
+    setDataState(({ todoTasks }) => {
       const allTasks = todoTasks.filter((el) => {
         const item = el;
         if (el.nameOfClass) {
@@ -65,14 +72,16 @@ export default class App extends Component {
         }
         return item;
       });
+
       return {
         todoTasks: allTasks,
       };
     });
   };
 
-  onButtonActive = () => {
-    this.setState(({ todoTasks }) => {
+  // Функция, показывающая активные задачи
+  const onButtonActive = () => {
+    setDataState(({ todoTasks }) => {
       const activeTasks = todoTasks.filter((el) => {
         const item = el;
         if (el.done) {
@@ -88,8 +97,9 @@ export default class App extends Component {
     });
   };
 
-  onButtonCompleted = () => {
-    this.setState(({ todoTasks }) => {
+  // Функция, показывающая выполненные задачи
+  const onButtonCompleted = () => {
+    setDataState(({ todoTasks }) => {
       const completedTasks = todoTasks.filter((el) => {
         const item = el;
         if (!el.done) {
@@ -105,8 +115,9 @@ export default class App extends Component {
     });
   };
 
-  onButtonClearAll = () => {
-    this.setState(({ todoTasks }) => {
+  // Функция, удалаяющая выполненные задачи
+  const onButtonClearAll = () => {
+    setDataState(({ todoTasks }) => {
       const activeTasks = [];
       todoTasks.filter((el) => {
         if (!el.done) {
@@ -120,39 +131,26 @@ export default class App extends Component {
     });
   };
 
-  createTodoTask(label, minutes = 30, seconds = 0) {
-    this.maxId += 1;
-    return {
-      label,
-      done: false,
-      id: this.maxId,
-      nameOfClass: '',
-      minutes: Number(minutes),
-      seconds: Number(seconds),
-    };
-  }
+  const doneCount = dataState.todoTasks.filter((el) => !el.done).length;
 
-  render() {
-    const { todoTasks } = this.state;
-    const doneCount = todoTasks.filter((el) => !el.done).length;
-
-    return (
-      <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-          <NewTaskForm onItemAdded={this.addItem} />
-        </header>
-        <section className="main">
-          <TaskList todos={todoTasks} onDeleted={this.deleteItem} onToggleDone={this.onToggleDone} />
-          <Footer
-            done={doneCount}
-            onButtonAll={this.onButtonAll}
-            onButtonActive={this.onButtonActive}
-            onButtonCompleted={this.onButtonCompleted}
-            onButtonClearAll={this.onButtonClearAll}
-          />
-        </section>
+  return (
+    <section className="todoapp">
+      <header className="header">
+        <h1>todos</h1>
+        <NewTaskForm onItemAdded={addItem} />
+      </header>
+      <section className="main">
+        <TaskList todos={dataState.todoTasks} onDeleted={deleteItem} onToggleDone={onToggleDone} />
+        <Footer
+          done={doneCount}
+          onButtonAll={onButtonAll}
+          onButtonActive={onButtonActive}
+          onButtonCompleted={onButtonCompleted}
+          onButtonClearAll={onButtonClearAll}
+        />
       </section>
-    );
-  }
-}
+    </section>
+  );
+};
+
+export default App;
